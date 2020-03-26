@@ -5,8 +5,8 @@ const DIRECTION_LEFT = 'left'
 const DIRECTION_RIGHT = 'right'
 
 const SPEED_VALUE_MAX = 100
-const SPEED_PERIOD_FAST = 0.5
-const SPEED_PERIOD_SLOW = 4
+const SPEED_PERIOD_FAST = 0.25
+const SPEED_PERIOD_SLOW = 2
 
 const calculatePeriod = value => SPEED_PERIOD_SLOW - (value / SPEED_VALUE_MAX) * (SPEED_PERIOD_SLOW - SPEED_PERIOD_FAST)
 
@@ -31,15 +31,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const $toggle = document.querySelector('#toggle')
     const $puck = document.querySelector('#puck')
     const $speed = document.querySelector('#speed')
+    const $clickLeft = document.querySelector('#click-left')
+    const $clickRight = document.querySelector('#click-right')
     replaceClass($puck, direction, direction)
 
     const updateButton = () => {
         $toggle.textContent = running ? 'Stop' : 'Start'
     }
 
+    const playClick = () => {
+        $clickLeft.pause()
+        $clickLeft.currentTime = 0;
+        $clickRight.pause()
+        $clickRight.currentTime = 0;
+        if (direction === DIRECTION_LEFT) {
+            $clickLeft.play()
+        } else {
+            $clickRight.play()
+        }
+    }
+
     const slide = () => {
+        playClick()
         const period = calculatePeriod(speed)
-        $puck.style.transition = period + 's'
+        $puck.style.transitionDuration = period + 's'
         const prevDirection = direction
         direction = direction === DIRECTION_RIGHT ? DIRECTION_LEFT : DIRECTION_RIGHT
         replaceClass($puck, prevDirection, direction)

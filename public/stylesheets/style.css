@@ -53,6 +53,7 @@ body {
     border-radius: 100%;
     margin: -25px;
     background: #09f;
+    transition-timing-function: linear;
 }
 .left {
     left: 0;
