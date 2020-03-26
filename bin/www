@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-const app = require('../app')
+const {app, server} = require('../app');
 const debug = require('debug')('remote-emdr:server')
 const http = require('http')
 
@@ -12,11 +12,6 @@ const http = require('http')
  */
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
-
-/**
- * Create HTTP server.
- */
-const server = http.createServer(app)
 
 /**
  * Listen on provided port, on all network interfaces.
