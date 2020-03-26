@@ -26,9 +26,10 @@ body {
     display: flex;
     padding: 20px 50px;
     align-items: center;
+    justify-content: center;
 }
 
-.toggle {
+.toggle, .speed {
     margin-right: 100px;
 }
 
@@ -60,4 +61,8 @@ body {
 }
 .right {
     left: 100%;
+}
+.time {
+    font: 24px "Ubuntu Mono", monospace;
+    color: #999;
 }

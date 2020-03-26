@@ -28,11 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let speed = 50
     let direction = DIRECTION_LEFT
     let animationTimeout
+    let timeInterval
+    let timePassed = 0
+    let startTime
     const $toggle = document.querySelector('#toggle')
     const $puck = document.querySelector('#puck')
     const $speed = document.querySelector('#speed')
     const $clickLeft = document.querySelector('#click-left')
     const $clickRight = document.querySelector('#click-right')
+    const $time = document.querySelector('#time')
     replaceClass($puck, direction, direction)
 
     const updateButton = () => {
@@ -41,9 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const playClick = () => {
         $clickLeft.pause()
-        $clickLeft.currentTime = 0;
+        $clickLeft.currentTime = 0
         $clickRight.pause()
-        $clickRight.currentTime = 0;
+        $clickRight.currentTime = 0
         if (direction === DIRECTION_LEFT) {
             $clickLeft.play()
         } else {
@@ -64,10 +68,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const start = () => {
         slide()
     }
+
     const stop = () => {
         if (animationTimeout) {
             clearTimeout(animationTimeout)
         }
+    }
+
+    const getTime = () => {
+        const now = new Date().getTime()
+        const passed = startTime ? timePassed + now - startTime : timePassed
+        const passedSeconds = Math.round(passed / 1000)
+
+        const seconds = passedSeconds % 60
+        const minutes = Math.floor(passedSeconds / 60)
+        return String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0')
+    }
+
+    const updateTime = () => {
+        $time.textContent = getTime()
     }
 
     $toggle.addEventListener('click', () => {
@@ -81,12 +100,20 @@ document.addEventListener('DOMContentLoaded', () => {
         running = false
         updateButton()
         stop()
+        if (startTime) {
+            const now = new Date().getTime()
+            timePassed += now - startTime
+            startTime = null
+        }
+        clearInterval(timeInterval)
     })
 
     Commands.subscribe(COMMAND_START, () => {
         running = true
         updateButton()
         start()
+        startTime = new Date().getTime()
+        timeInterval = setInterval(updateTime, 1000)
     })
 
     Commands.subscribe(COMMAND_SPEED, command => {
@@ -95,4 +122,5 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     updateButton()
+    updateTime()
 })
