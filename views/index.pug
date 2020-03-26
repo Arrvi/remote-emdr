@@ -1,5 +1,10 @@
 extends layout
 
 block content
-    h1= title
-    p Welcome to #{title}
+    h1 Session #{room}
+
+    button#button Increment
+    p#state Loading...
+
+    script(src='/javascripts/dummy-button.js')
+    script Commands.connect('#{room}')
