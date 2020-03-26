@@ -1,10 +1,17 @@
 extends layout
 
 block content
-    h1 Session #{room}
+    div.content
+        p.info Session #{room}
 
-    button#button Increment
-    p#state Loading...
+        div#display.display
+            .rail
+                #puck.puck
 
-    script(src='/javascripts/dummy-button.js')
+        div.controls
+            button#toggle.toggle Loading...
+            label(for='speed') Speed:
+            input#speed.speed(type='range' min='1' max='100' step='1' value='50')
+
+    script(src='/javascripts/emdr-app.js')
     script Commands.connect('#{room}')
